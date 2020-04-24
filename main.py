@@ -13,6 +13,9 @@ from model import *
 from utils import *
 from config import config, log_config
 
+from google.colab import drive
+drive.mount('/content/drive')
+
 ###====================== HYPER-PARAMETERS ===========================###
 ## Adam
 batch_size = config.TRAIN.batch_size
@@ -141,7 +144,9 @@ def train():
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir+'/d_{}.npz'.format(tl.global_flag['mode']), network=net_d)
 
     ###============================= LOAD VGG ===============================###
-    vgg19_npy_path = "vgg19.npy"
+    
+#     vgg19_npy_path = "vgg19.npy"
+    vgg19_npy_path = '/content/drive/Shared drives/linriversluv@gmail.com/weights/vgg19.npy'
     if not os.path.isfile(vgg19_npy_path):
         print("Please download vgg19.npz from : https://github.com/machrisaa/tensorflow-vgg")
         exit()
