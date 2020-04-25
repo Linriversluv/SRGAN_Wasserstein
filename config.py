@@ -24,8 +24,8 @@ config.TRAIN.decay_every = int(config.TRAIN.n_epoch / 2)
 # config.TRAIN.lr_img_path = '/home/ubuntu/huzhihao/SRGAN_Wasserstein/dataset/DIV2K_train_LR_bicubic/X4/'
 #config.TRAIN.hr_img_path = '/home/ubuntu/dataset/image_tag/srgan_all_jpg/trn_hr/'
 #config.TRAIN.lr_img_path = '/home/ubuntu/dataset/image_tag/srgan_all_jpg/trn_lr/'
-config.TRAIN.hr_img_path = '/root/.keras/datasets/DIV2K_train_HR/'
-config.TRAIN.lr_img_path = '/root/.keras/datasets/DIV2K_train_LR_bicubic_X4/'
+config.TRAIN.hr_img_path = '/content/drive/Shared drives/linriversluv@gmail.com/DIV2K_train_HR (Unzipped Files)/DIV2K_train_HR/'
+config.TRAIN.lr_img_path = '/content/drive/Shared drives/linriversluv@gmail.com/DIV2K_train_LR_bicubic_X4 (Unzipped Files)/DIV2K_train_LR_bicubic/X4/'
 
 config.VALID = edict()
 ## test set location
@@ -33,12 +33,12 @@ config.VALID = edict()
 # config.VALID.lr_img_path = '/home/ubuntu/huzhihao/SRGAN_Wasserstein/dataset/DIV2K_valid_LR_bicubic/X4/'
 #config.VALID.hr_img_path = '/home/ubuntu/dataset/image_tag/srgan_all_jpg/val_hr/'
 #config.VALID.lr_img_path = '/home/ubuntu/dataset/image_tag/srgan_all_jpg/val_lr/'
-config.VALID.hr_img_path = '/root/.keras/datasets/DIV2K_valid_HR/'
-config.VALID.lr_img_path = '/root/.keras/datasets/DIV2K_valid_LR_bicubic_X4/'
+config.VALID.hr_img_path = '/content/drive/Shared drives/linriversluv@gmail.com/DIV2K_valid_HR (Unzipped Files)/DIV2K_valid_HR/'
+config.VALID.lr_img_path = '/content/drive/Shared drives/linriversluv@gmail.com/DIV2K_valid_LR_bicubic_X4 (Unzipped Files)/DIV2K_valid_LR_bicubic/X4/'
 
 
 # config.VALID.logdir = '/home/ubuntu/SRGAN_Wasserstein/log/'
-config.VALID.logdir = '/root/.keras/datasets/'
+config.VALID.logdir = '/content/drive/Shared drives/linriversluv@gmail.com/logs/
 def log_config(filename, cfg):
     with open(filename, 'w') as f:
         f.write("================================================\n")
