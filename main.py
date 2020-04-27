@@ -156,6 +156,7 @@ def train():
         print("Please download vgg19.npz from : https://github.com/machrisaa/tensorflow-vgg")
         exit()
         
+    np_load_old = np.load    
     np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
     
     npz = np.load(vgg19_npy_path, encoding='latin1').item()
