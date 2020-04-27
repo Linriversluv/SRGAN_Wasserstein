@@ -286,7 +286,8 @@ def train():
 
 def evaluate():
     ## create folders to save result images
-    save_dir = "samples/{}".format(tl.global_flag['mode'])
+    
+    save_dir = "/content/drive/Shared drives/linriversluv@gmail.com/logs/{}".format(tl.global_flag['mode'])
     tl.files.exists_or_mkdir(save_dir)
     checkpoint_dir = "checkpoint"
 
