@@ -57,6 +57,8 @@ def train():
     train_lr_img_list = sorted(tl.files.load_file_list(path=config.TRAIN.lr_img_path, regx='.*.png', printable=False))
     valid_hr_img_list = sorted(tl.files.load_file_list(path=config.VALID.hr_img_path, regx='.*.png', printable=False))
     valid_lr_img_list = sorted(tl.files.load_file_list(path=config.VALID.lr_img_path, regx='.*.png', printable=False))
+    
+    print('PRE-LOAD DATA')
 
     ## If your machine have enough memory, please pre-load the whole train set.
     train_hr_imgs = read_all_imgs(train_hr_img_list, path=config.TRAIN.hr_img_path, n_threads=32)
@@ -72,6 +74,7 @@ def train():
 
     ###========================== DEFINE MODEL ============================###
     ## train inference
+    print('train inference')
     t_image = tf.placeholder('float32', [batch_size, 96, 96, 3], name='t_image_input_to_SRGAN_generator')
     t_target_image = tf.placeholder('float32', [batch_size, 384, 384, 3], name='t_target_image')
 
@@ -144,14 +147,14 @@ def train():
     tl.files.load_and_assign_npz(sess=sess, name=checkpoint_dir+'/d_{}.npz'.format(tl.global_flag['mode']), network=net_d)
 
     ###============================= LOAD VGG ===============================###
-    
+    print('LOAD VGG')
 #     vgg19_npy_path = "vgg19.npy"
     vgg19_npy_path = '/content/drive/Shared drives/linriversluv@gmail.com/weights/vgg19.npy'
     if not os.path.isfile(vgg19_npy_path):
         print("Please download vgg19.npz from : https://github.com/machrisaa/tensorflow-vgg")
         exit()
     npz = np.load(vgg19_npy_path, encoding='latin1').item()
-
+    
     params = []
     for val in sorted( npz.items() ):
         W = np.asarray(val[1][0])
@@ -161,8 +164,9 @@ def train():
     tl.files.assign_params(sess, params, net_vgg)
     # net_vgg.print_params(False)
     # net_vgg.print_layers()
-
+    print('LOAD VGG SUCESSFULLY')
     ###============================= TRAINING ===============================###
+    print('TRAINING')
     ## use first `batch_size` of train set to have a quick test during training
     sample_imgs = train_hr_imgs[0:batch_size]
     # sample_imgs = read_all_imgs(train_hr_img_list[0:batch_size], path=config.TRAIN.hr_img_path, n_threads=32) # if no pre-load train set
@@ -177,6 +181,7 @@ def train():
 
     ###========================= initialize G ====================###
     ## fixed learning rate
+    print('initialize G')
     sess.run(tf.assign(lr_v, lr_init))
     print(" ** fixed learning rate: %f (for init G)" % lr_init)
     for epoch in range(0, n_epoch_init+1):
@@ -207,7 +212,9 @@ def train():
             n_iter += 1
         log = "[*] Epoch: [%2d/%2d] time: %4.4fs, mse: %.8f" % (epoch, n_epoch_init, time.time() - epoch_time, total_mse_loss/n_iter)
         print(log)
-
+        print('initialize G done')
+        
+        print('evaluation')
         ## quick evaluation on train set
         if (epoch != 0) and (epoch % 10 == 0):
             out = sess.run(net_g_test.outputs, {t_image: sample_imgs_96})#; print('gen sub-image:', out.shape, out.min(), out.max())
@@ -223,7 +230,7 @@ def train():
     # clipping method
     # clip_discriminator_var_op = [var.assign(tf.clip_by_value(var, self.clip_values[0], self.clip_values[1])) for
     #                                      var in self.discriminator_variables]
-
+    print('train GAN (SRGAN)')
     for epoch in range(0, n_epoch+1):
         ## update learning rate
         if epoch !=0 and (epoch % decay_every == 0):
@@ -239,25 +246,25 @@ def train():
         epoch_time = time.time()
         total_d_loss, total_g_loss, n_iter = 0, 0, 0
 
-        ## If your machine cannot load all images into memory, you should use
-        ## this one to load batch of images while training.
-        # random.shuffle(train_hr_img_list)
-        # for idx in range(0, len(train_hr_img_list), batch_size):
-        #     step_time = time.time()
-        #     b_imgs_list = train_hr_img_list[idx : idx + batch_size]
-        #     b_imgs = tl.prepro.threading_data(b_imgs_list, fn=get_imgs_fn, path=config.TRAIN.hr_img_path)
-        #     b_imgs_384 = tl.prepro.threading_data(b_imgs, fn=crop_sub_imgs_fn, is_random=True)
-        #     b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
+        # If your machine cannot load all images into memory, you should use
+        # this one to load batch of images while training.
+        random.shuffle(train_hr_img_list)
+        for idx in range(0, len(train_hr_img_list), batch_size):
+            step_time = time.time()
+            b_imgs_list = train_hr_img_list[idx : idx + batch_size]
+            b_imgs = tl.prepro.threading_data(b_imgs_list, fn=get_imgs_fn, path=config.TRAIN.hr_img_path)
+            b_imgs_384 = tl.prepro.threading_data(b_imgs, fn=crop_sub_imgs_fn, is_random=True)
+            b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
 
         ## If your machine have enough memory, please pre-load the whole train set.
-        for idx in range(0, len(train_hr_imgs), batch_size):
-            step_time = time.time()
-            b_imgs_384 = tl.prepro.threading_data(
-                    train_hr_imgs[idx : idx + batch_size],
-                    fn=crop_sub_imgs_fn, is_random=True)
-            b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
+#         for idx in range(0, len(train_hr_imgs), batch_size):
+#             step_time = time.time()
+#             b_imgs_384 = tl.prepro.threading_data(
+#                     train_hr_imgs[idx : idx + batch_size],
+#                     fn=crop_sub_imgs_fn, is_random=True)
+#             b_imgs_96 = tl.prepro.threading_data(b_imgs_384, fn=downsample_fn)
             ## update D
-
+            print('update D')
             errD, summary, _, _ = sess.run([d_loss, merged, d_optim, clip_D], {t_image: b_imgs_96, t_target_image: b_imgs_384})
             loss_writer.add_summary(summary, idx)
             # d_vars = sess.run(clip_discriminator_var_op)
