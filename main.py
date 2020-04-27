@@ -61,7 +61,8 @@ def train():
     print('PRE-LOAD DATA')
 
     ## If your machine have enough memory, please pre-load the whole train set.
-    train_hr_imgs = read_all_imgs(train_hr_img_list, path=config.TRAIN.hr_img_path, n_threads=32)
+#     train_hr_imgs = read_all_imgs(train_hr_img_list, path=config.TRAIN.hr_img_path, n_threads=32)
+
     # for im in train_hr_imgs:
     #     print(im.shape)
     # valid_lr_imgs = read_all_imgs(valid_lr_img_list, path=config.VALID.lr_img_path, n_threads=32)
