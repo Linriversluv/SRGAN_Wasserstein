@@ -7,7 +7,7 @@ import numpy as np
 from time import localtime, strftime
 import logging, scipy
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 import tensorlayer as tl
 from model import *
 from utils import *
@@ -175,8 +175,9 @@ def train():
     ###============================= TRAINING ===============================###
     print('TRAINING')
     ## use first `batch_size` of train set to have a quick test during training
-    sample_imgs = train_hr_imgs[0:batch_size]
-    # sample_imgs = read_all_imgs(train_hr_img_list[0:batch_size], path=config.TRAIN.hr_img_path, n_threads=32) # if no pre-load train set
+#     sample_imgs = train_hr_imgs[0:batch_size]  # pre-load
+    sample_imgs = read_all_imgs(train_hr_img_list[0:batch_size], path=config.TRAIN.hr_img_path, n_threads=32) # if no pre-load train set
+    
     sample_imgs_384 = tl.prepro.threading_data(sample_imgs, fn=crop_sub_imgs_fn, is_random=False)
     print('sample HR sub-image:',sample_imgs_384.shape, sample_imgs_384.min(), sample_imgs_384.max())
     sample_imgs_96 = tl.prepro.threading_data(sample_imgs_384, fn=downsample_fn)
