@@ -75,7 +75,7 @@ def train():
 
     ###========================== DEFINE MODEL ============================###
     ## train inference
-    print('train inference')
+    print('Train inference')
     t_image = tf.placeholder('float32', [batch_size, 96, 96, 3], name='t_image_input_to_SRGAN_generator')
     t_target_image = tf.placeholder('float32', [batch_size, 384, 384, 3], name='t_target_image')
 
@@ -94,6 +94,7 @@ def train():
     _, vgg_predict_emb = Vgg19_simple_api((t_predict_image_224+1)/2, reuse=True)
 
     ## test inference
+    print('Test inference')
     net_g_test = SRGAN_g(t_image, is_train=False, reuse=True)
 
     # ###========================== DEFINE TRAIN OPS ==========================###
@@ -154,8 +155,12 @@ def train():
     if not os.path.isfile(vgg19_npy_path):
         print("Please download vgg19.npz from : https://github.com/machrisaa/tensorflow-vgg")
         exit()
+        
+    np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
+    
     npz = np.load(vgg19_npy_path, encoding='latin1').item()
     
+    print('Params extending')
     params = []
     for val in sorted( npz.items() ):
         W = np.asarray(val[1][0])
