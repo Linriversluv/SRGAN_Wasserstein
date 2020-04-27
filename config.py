@@ -38,7 +38,7 @@ config.VALID.lr_img_path = '/content/drive/Shared drives/linriversluv@gmail.com/
 
 
 # config.VALID.logdir = '/home/ubuntu/SRGAN_Wasserstein/log/'
-config.VALID.logdir = '/content/drive/Shared drives/linriversluv@gmail.com/logs/
+config.VALID.logdir = '/content/drive/Shared drives/linriversluv@gmail.com/logs/'
 def log_config(filename, cfg):
     with open(filename, 'w') as f:
         f.write("================================================\n")
