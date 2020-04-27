@@ -311,10 +311,10 @@ def evaluate():
 
     ###========================== DEFINE MODEL ============================###
     imid = 64 # 0: 企鹅  81: 蝴蝶 53: 鸟  64: 古堡
-#     valid_lr_img = valid_lr_imgs[imid]
+    valid_lr_img = valid_lr_imgs[imid]
     valid_hr_img = valid_hr_imgs[imid]
     #img_name = '0010_80.jpg'
-    valid_lr_img = get_imgs_fn('ers0227_cabin.jpg', '/content/drive/Shared drives/linriversluv@gmail.com/')  # if you want to test your own image
+#     valid_lr_img = get_imgs_fn('ers0227_cabin.jpg', '/content/drive/Shared drives/linriversluv@gmail.com/')  # if you want to test your own image
     valid_lr_img = (valid_lr_img / 127.5) - 1   # rescale to ［－1, 1]
     # print(valid_lr_img.min(), valid_lr_img.max())
 
