@@ -314,7 +314,7 @@ def evaluate():
 #     valid_lr_img = valid_lr_imgs[imid]
     valid_hr_img = valid_hr_imgs[imid]
     #img_name = '0010_80.jpg'
-    valid_lr_img = get_imgs_fn(img_name, '/content/drive/Shared drives/linriversluv@gmail.com/img.png')  # if you want to test your own image
+    valid_lr_img = get_imgs_fn('img.png', '/content/drive/Shared drives/linriversluv@gmail.com/img.png')  # if you want to test your own image
     valid_lr_img = (valid_lr_img / 127.5) - 1   # rescale to ［－1, 1]
     # print(valid_lr_img.min(), valid_lr_img.max())
 
